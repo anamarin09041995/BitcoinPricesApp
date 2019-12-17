@@ -8,5 +8,5 @@ data class BitcoinInfoModel(
     var unit: String,
     var period: String? = null,
     var description: String? = null,
-    var values: Flowable<BitcoinCoordinatesModel>
+    var values: List<BitcoinCoordinatesModel>
 )
