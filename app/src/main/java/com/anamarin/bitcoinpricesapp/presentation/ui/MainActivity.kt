@@ -1,7 +1,8 @@
-package com.anamarin.bitcoinpricesapp
+package com.anamarin.bitcoinpricesapp.presentation.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.anamarin.bitcoinpricesapp.R
 
 class MainActivity : AppCompatActivity() {
 
