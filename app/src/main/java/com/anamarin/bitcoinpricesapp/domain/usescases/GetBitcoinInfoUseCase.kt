@@ -2,7 +2,7 @@ package com.anamarin.bitcoinpricesapp.domain.usescases
 
 import com.anamarin.bitcoinpricesapp.domain.repositories.BitcoinInfoRepository
 
-class GetBitcoinInfoUsecase(repository: BitcoinInfoRepository, quantity: Int, period: String): BaseUseCase(repository = repository, quantity = quantity, period = period ){
+class GetBitcoinInfoUsecase(repository: BitcoinInfoRepository): BaseUseCase(repository = repository){
 
     /*fun call(): Results<BitcoinInfoEntity> {
         val result = repository.fetchBitcoinInfo(quantity, WEEK_PERIOD)

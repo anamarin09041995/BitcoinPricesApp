@@ -1,16 +1,15 @@
 package com.anamarin.bitcoinpricesapp.data.repositories
 
+import com.anamarin.bitcoinpricesapp.core.error.ServerException
 import com.anamarin.bitcoinpricesapp.core.networkStatus.NetworkStatus
-import com.anamarin.bitcoinpricesapp.core.result.Outcome.Success
+import com.anamarin.bitcoinpricesapp.core.result.Failure
+import com.anamarin.bitcoinpricesapp.core.result.Success
 import com.anamarin.bitcoinpricesapp.core.utils.WEEK_PERIOD
 import com.anamarin.bitcoinpricesapp.core.utils.getTestBitcoinInfoModel
 import com.anamarin.bitcoinpricesapp.data.api.BitcoinInfoClient
 import com.anamarin.bitcoinpricesapp.data.local.BitcoinInfoDao
-import com.anamarin.bitcoinpricesapp.data.models.BitcoinInfoModel
+import com.nhaarman.mockitokotlin2.*
 import org.junit.Before
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.whenever
 import junit.framework.TestCase.assertEquals
 import org.junit.Test
 
@@ -22,8 +21,14 @@ class BitcoinInfoRepositoryImpTest {
     private lateinit var mockRemoteData: BitcoinInfoClient
     private lateinit var mockNetworkStatus: NetworkStatus
 
+    private val quantity = 2
+    private val period: String = WEEK_PERIOD
+
+    private val quantityString = quantity.toString()
+    private val timestamp: String = quantityString + period
+
     @Before
-    fun setUp(){
+    fun setUp() {
         mockLocalData = mock()
         mockRemoteData = mock()
         mockNetworkStatus = mock()
@@ -32,10 +37,10 @@ class BitcoinInfoRepositoryImpTest {
     }
 
     @Test
-    fun isCheckingIfTheDeviceHasInternet(){
+    fun isCheckingIfTheDeviceHasInternet() {
         whenever(mockNetworkStatus.hasNetworkAccess()).thenReturn(true)
 
-        repository.fetchBitcoinInfo(1, WEEK_PERIOD)
+        repository.fetchBitcoinInfo(quantity, period)
 
         verify(mockNetworkStatus).hasNetworkAccess()
     }
@@ -43,31 +48,52 @@ class BitcoinInfoRepositoryImpTest {
     // Online behavior
 
     @Test
-    fun isGettingRemoteDataSuccessfully(){
+    fun isGettingRemoteDataSuccessfully() {
         val model = getTestBitcoinInfoModel()
         whenever(mockNetworkStatus.hasNetworkAccess()).thenReturn(true)
-        whenever(mockRemoteData.getBitcoinInfoInPeriod("1weeks")).thenReturn(Success(model))
+        whenever(mockRemoteData.getBitcoinInfoInPeriod(timestamp)).thenReturn(Success(model))
 
-        val result = repository.fetchBitcoinInfo(1, WEEK_PERIOD)
+        val result = repository.fetchBitcoinInfo(quantity, period)
 
-        verify(mockRemoteData).getBitcoinInfoInPeriod("1weeks")
+        verify(mockRemoteData).getBitcoinInfoInPeriod(timestamp)
 
         assert(result is Success)
-        assertEquals((result as Success).data, Success(model))
+        assertEquals((result as Success).data, model)
     }
 
     @Test
-    fun isSavingTheDataLocally_whenTheCallToRemoteDataSourceIsSuccessfully(){
+    fun isSavingTheDataLocally_whenCallToRemoteDataSourceIsSuccessfully() {
         val model = getTestBitcoinInfoModel()
         whenever(mockNetworkStatus.hasNetworkAccess()).thenReturn(true)
-        whenever(mockRemoteData.getBitcoinInfoInPeriod("1weeks")).thenReturn(Success(model))
+        whenever(mockRemoteData.getBitcoinInfoInPeriod(timestamp)).thenReturn(Success(model))
 
-        repository.fetchBitcoinInfo(1, WEEK_PERIOD)
+        repository.fetchBitcoinInfo(quantity, period)
 
-        verify(mockRemoteData).getBitcoinInfoInPeriod("1weeks")
+        verify(mockRemoteData).getBitcoinInfoInPeriod(timestamp)
         verify(mockLocalData).saveBitcoinInfo(model)
-
     }
+
+    @Test
+    fun isUsingLocalData_whenCallToRemoteDataSourceIsUnsuccessfully() {
+        val model = getTestBitcoinInfoModel()
+        whenever(mockNetworkStatus.hasNetworkAccess()).thenReturn(true)
+        whenever(mockRemoteData.getBitcoinInfoInPeriod(timestamp)).thenAnswer {
+            Failure(
+                ServerException()
+            )
+        }
+        whenever(mockLocalData.getLastBitcoinInfoSaved()).thenReturn(model)
+
+        val result = repository.fetchBitcoinInfo(quantity, period)
+
+        verify(mockRemoteData).getBitcoinInfoInPeriod(timestamp)
+        verify(mockLocalData).getLastBitcoinInfoSaved()
+        verifyNoMoreInteractions(mockRemoteData)
+
+        assertEquals((result as Success).data, model)
+    }
+
+    //Offline behavior
 
 
 }
