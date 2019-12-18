@@ -18,16 +18,16 @@ import org.mockito.ArgumentMatchers.anyString
 import org.mockito.Mockito
 import java.lang.Exception
 
-class GetBitcoinPricesOfLasteWeekTest{
+class GetBitcoinInfoUseCaseTest{
 
     private lateinit var repository: BitcoinInfoRepository
 
-    private lateinit var useCase: GetBitcoinInfoOfLastWeek
+    private lateinit var useCase: GetBitcoinInfoUsecase
 
     @Before
     fun setUp(){
         repository = mock()
-        useCase = GetBitcoinInfoOfLastWeek(repository)
+        useCase = GetBitcoinInfoUsecase(repository)
     }
 
     @Test
