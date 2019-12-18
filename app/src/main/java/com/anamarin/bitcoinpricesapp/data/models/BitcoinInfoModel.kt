@@ -9,7 +9,7 @@ import kotlinx.android.parcel.Parcelize
 @Entity
 data class BitcoinInfoModel(
     @PrimaryKey(autoGenerate = true)
-    var id: Long,
+    var id: Long? = 0,
     var status: String? = null,
     var name: String,
     var unit: String,

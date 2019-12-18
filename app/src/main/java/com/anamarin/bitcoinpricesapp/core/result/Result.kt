@@ -4,11 +4,12 @@ import java.lang.Exception
 
 //out:
 
-open class Results<out T>{
+open class Outcome<out T>{
 
-    data class Success<out T>(val data: T) : Results<T>()
-
-    data class Failure(val exception: Exception) : Results<Nothing>()
+    data class Success<out T>(val data: T) : Outcome<T>()
+    data class Failure(val cause: Exception) : Outcome<Nothing>()
 
 }
+
+
 

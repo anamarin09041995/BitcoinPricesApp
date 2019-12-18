@@ -1,12 +1,17 @@
 package com.anamarin.bitcoinpricesapp.data.repositories
 
-import com.anamarin.bitcoinpricesapp.core.result.Results
+import com.anamarin.bitcoinpricesapp.core.networkStatus.NetworkStatus
+import com.anamarin.bitcoinpricesapp.core.result.Outcome
+import com.anamarin.bitcoinpricesapp.core.result.Outcome.Success
+import com.anamarin.bitcoinpricesapp.data.api.BitcoinInfoClient
+import com.anamarin.bitcoinpricesapp.data.local.BitcoinInfoDao
 import com.anamarin.bitcoinpricesapp.domain.repositories.BitcoinInfoRepository
 
-class BitcoinInfoRepositoryImp: BitcoinInfoRepository{
+class BitcoinInfoRepositoryImp(private val localData: BitcoinInfoDao, private val remoteData: BitcoinInfoClient, private val networkStatus: NetworkStatus): BitcoinInfoRepository{
 
-    override fun fetchBitcoinInfo(quantity: Int, period: String): Results<*> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun fetchBitcoinInfo(quantity: Int, period: String): Outcome<*> {
+        networkStatus.hasNetworkAccess()
+        return Success(localData.getLastBitcoinInfoSaved())
     }
 
 }

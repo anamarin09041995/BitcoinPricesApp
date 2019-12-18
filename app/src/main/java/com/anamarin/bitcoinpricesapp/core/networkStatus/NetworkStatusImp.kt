@@ -1,11 +1,11 @@
-package com.anamarin.bitcoinpricesapp.core.networkInfo
+package com.anamarin.bitcoinpricesapp.core.networkStatus
 
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
 
-class NetworkInfoImp(context: Context): NetworkInfo{
+class NetworkStatusImp(context: Context): NetworkStatus{
 
     private val appContext: Context = context
 

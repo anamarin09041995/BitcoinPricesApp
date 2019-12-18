@@ -1,10 +1,10 @@
 package com.anamarin.bitcoinpricesapp.domain.usescases
 
-import com.anamarin.bitcoinpricesapp.core.result.Results.Success
-import com.anamarin.bitcoinpricesapp.core.result.Results.Failure
+import com.anamarin.bitcoinpricesapp.core.result.Outcome.Success
+import com.anamarin.bitcoinpricesapp.core.result.Outcome.Failure
 import com.anamarin.bitcoinpricesapp.core.utils.WEEK_PERIOD
-import com.anamarin.bitcoinpricesapp.core.utils.getBitcoinInfoEntity
-import com.anamarin.bitcoinpricesapp.core.utils.getBitcoinInfoModel
+import com.anamarin.bitcoinpricesapp.core.utils.getTestBitcoinInfoEntity
+import com.anamarin.bitcoinpricesapp.core.utils.getTestBitcoinInfoModel
 import com.anamarin.bitcoinpricesapp.domain.entities.BitcoinInfoEntity
 import com.anamarin.bitcoinpricesapp.domain.repositories.BitcoinInfoRepository
 import com.nhaarman.mockitokotlin2.mock
@@ -39,8 +39,8 @@ class GetBitcoinInfoUseCaseTest{
     @Test
     fun getBitcoinInfoSuccessfully(){
 
-        val model = getBitcoinInfoModel()
-        val entity = getBitcoinInfoEntity(model)
+        val model = getTestBitcoinInfoModel()
+        val entity = getTestBitcoinInfoEntity(model)
 
         whenever(repository.fetchBitcoinInfo(Mockito.anyInt(), anyString())).thenReturn(
             Success(
