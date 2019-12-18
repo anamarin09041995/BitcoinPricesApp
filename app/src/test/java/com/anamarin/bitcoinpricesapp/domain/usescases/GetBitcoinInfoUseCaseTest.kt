@@ -62,7 +62,6 @@ class GetBitcoinInfoUseCaseTest{
         whenever(repository.fetchBitcoinInfo(Mockito.anyInt(), anyString())).thenReturn(
             Failure(Exception())
         )
-
         val result = useCase.call()
 
         verify(repository).fetchBitcoinInfo(1, WEEK_PERIOD)

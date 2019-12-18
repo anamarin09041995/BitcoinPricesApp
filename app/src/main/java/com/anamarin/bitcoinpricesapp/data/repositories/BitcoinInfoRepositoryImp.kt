@@ -10,8 +10,11 @@ import com.anamarin.bitcoinpricesapp.domain.repositories.BitcoinInfoRepository
 class BitcoinInfoRepositoryImp(private val localData: BitcoinInfoDao, private val remoteData: BitcoinInfoClient, private val networkStatus: NetworkStatus): BitcoinInfoRepository{
 
     override fun fetchBitcoinInfo(quantity: Int, period: String): Outcome<*> {
-        networkStatus.hasNetworkAccess()
-        return Success(localData.getLastBitcoinInfoSaved())
+        return if(networkStatus.hasNetworkAccess()){
+            Success(remoteData.getBitcoinInfoInPeriod("1weeks"))
+        }else {
+            Success(localData.getLastBitcoinInfoSaved())
+        }
     }
 
 }
