@@ -1,6 +1,5 @@
 package com.anamarin.bitcoinpricesapp.data.repositories
 
-import com.anamarin.bitcoinpricesapp.core.error.DatabaseException
 import com.anamarin.bitcoinpricesapp.core.error.ServerException
 import com.anamarin.bitcoinpricesapp.core.networkStatus.NetworkStatus
 import com.anamarin.bitcoinpricesapp.core.result.Failure
@@ -14,7 +13,6 @@ import com.nhaarman.mockitokotlin2.*
 import org.junit.Before
 import junit.framework.TestCase.assertEquals
 import org.junit.Test
-import java.lang.Exception
 
 class BitcoinInfoRepositoryImpTest {
 
@@ -29,6 +27,8 @@ class BitcoinInfoRepositoryImpTest {
 
     private val quantityString = quantity.toString()
     private val timestamp: String = quantityString + period
+
+    private val model = getTestBitcoinInfoModel()
 
     @Before
     fun setUp() {
@@ -52,12 +52,13 @@ class BitcoinInfoRepositoryImpTest {
 
     @Test
     fun isGettingRemoteDataSuccessfully() {
-        val model = getTestBitcoinInfoModel()
+
         whenever(mockNetworkStatus.hasNetworkAccess()).thenReturn(true)
         whenever(mockRemoteData.getBitcoinInfoInPeriod(timestamp)).thenReturn(Success(model))
 
         val result = repository.fetchBitcoinInfo(quantity, period)
 
+        verify(mockNetworkStatus).hasNetworkAccess()
         verify(mockRemoteData).getBitcoinInfoInPeriod(timestamp)
 
         assert(result is Success)
@@ -66,19 +67,18 @@ class BitcoinInfoRepositoryImpTest {
 
     @Test
     fun isSavingTheDataLocally_whenCallToRemoteDataSourceIsSuccessfully() {
-        val model = getTestBitcoinInfoModel()
         whenever(mockNetworkStatus.hasNetworkAccess()).thenReturn(true)
         whenever(mockRemoteData.getBitcoinInfoInPeriod(timestamp)).thenReturn(Success(model))
 
         repository.fetchBitcoinInfo(quantity, period)
 
+        verify(mockNetworkStatus).hasNetworkAccess()
         verify(mockRemoteData).getBitcoinInfoInPeriod(timestamp)
         verify(mockLocalData).saveBitcoinInfo(model)
     }
 
     @Test
     fun isUsingLocalData_whenCallToRemoteDataSourceIsUnsuccessfully() {
-        val model = getTestBitcoinInfoModel()
         whenever(mockNetworkStatus.hasNetworkAccess()).thenReturn(true)
         whenever(mockRemoteData.getBitcoinInfoInPeriod(timestamp)).thenAnswer {
             Failure(
@@ -89,6 +89,7 @@ class BitcoinInfoRepositoryImpTest {
 
         val result = repository.fetchBitcoinInfo(quantity, period)
 
+        verify(mockNetworkStatus).hasNetworkAccess()
         verify(mockRemoteData).getBitcoinInfoInPeriod(timestamp)
         verify(mockLocalData).getLastBitcoinInfoSaved()
         verifyNoMoreInteractions(mockRemoteData)
@@ -109,6 +110,7 @@ class BitcoinInfoRepositoryImpTest {
 
         val result = repository.fetchBitcoinInfo(quantity, period)
 
+        verify(mockNetworkStatus).hasNetworkAccess()
         verify(mockRemoteData).getBitcoinInfoInPeriod(timestamp)
         verify(mockLocalData).getLastBitcoinInfoSaved()
 
@@ -116,6 +118,18 @@ class BitcoinInfoRepositoryImpTest {
     }
 
     //Offline behavior
+
+    @Test
+    fun isReturningDataFromLocalSource(){
+        whenever(mockNetworkStatus.hasNetworkAccess()).thenReturn(false)
+        whenever(mockLocalData.getLastBitcoinInfoSaved()).thenReturn(model)
+
+        val result = repository.fetchBitcoinInfo(quantity, period)
+
+        verifyZeroInteractions(mockRemoteData)
+        verify(mockNetworkStatus).hasNetworkAccess()
+        assertEquals((result as Success).data, model)
+    }
 
 
 }
