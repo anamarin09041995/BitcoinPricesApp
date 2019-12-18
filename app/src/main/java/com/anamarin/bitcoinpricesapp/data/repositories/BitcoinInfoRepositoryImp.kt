@@ -5,13 +5,16 @@ import com.anamarin.bitcoinpricesapp.core.result.Outcome
 import com.anamarin.bitcoinpricesapp.core.result.Outcome.Success
 import com.anamarin.bitcoinpricesapp.data.api.BitcoinInfoClient
 import com.anamarin.bitcoinpricesapp.data.local.BitcoinInfoDao
+import com.anamarin.bitcoinpricesapp.data.models.BitcoinInfoModel
 import com.anamarin.bitcoinpricesapp.domain.repositories.BitcoinInfoRepository
 
 class BitcoinInfoRepositoryImp(private val localData: BitcoinInfoDao, private val remoteData: BitcoinInfoClient, private val networkStatus: NetworkStatus): BitcoinInfoRepository{
 
     override fun fetchBitcoinInfo(quantity: Int, period: String): Outcome<*> {
-        return if(networkStatus.hasNetworkAccess()){
-            Success(remoteData.getBitcoinInfoInPeriod("1weeks"))
+        val bitcoinInfoToSave = remoteData.getBitcoinInfoInPeriod("1weeks")
+        return if(networkStatus.hasNetworkAccess() && bitcoinInfoToSave is Success){
+            localData.saveBitcoinInfo(bitcoinInfoToSave.data as BitcoinInfoModel)
+            Success(bitcoinInfoToSave)
         }else {
             Success(localData.getLastBitcoinInfoSaved())
         }

@@ -56,6 +56,18 @@ class BitcoinInfoRepositoryImpTest {
         assertEquals((result as Success).data, Success(model))
     }
 
+    @Test
+    fun isSavingTheDataLocally_whenTheCallToRemoteDataSourceIsSuccessfully(){
+        val model = getTestBitcoinInfoModel()
+        whenever(mockNetworkStatus.hasNetworkAccess()).thenReturn(true)
+        whenever(mockRemoteData.getBitcoinInfoInPeriod("1weeks")).thenReturn(Success(model))
+
+        repository.fetchBitcoinInfo(1, WEEK_PERIOD)
+
+        verify(mockRemoteData).getBitcoinInfoInPeriod("1weeks")
+        verify(mockLocalData).saveBitcoinInfo(model)
+
+    }
 
 
 }
