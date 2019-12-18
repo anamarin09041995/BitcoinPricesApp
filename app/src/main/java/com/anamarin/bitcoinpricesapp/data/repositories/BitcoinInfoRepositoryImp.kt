@@ -1,5 +1,6 @@
 package com.anamarin.bitcoinpricesapp.data.repositories
 
+import com.anamarin.bitcoinpricesapp.core.error.DatabaseException
 import com.anamarin.bitcoinpricesapp.core.error.ServerException
 import com.anamarin.bitcoinpricesapp.core.networkStatus.NetworkStatus
 import com.anamarin.bitcoinpricesapp.core.result.Failure
@@ -23,22 +24,25 @@ class BitcoinInfoRepositoryImp(
 
         return if (networkStatus.hasNetworkAccess()) {
             val result = remoteData.getBitcoinInfoInPeriod(timestamp)
-            if (result is Success){
+            if (result is Success) {
                 localData.saveBitcoinInfo(result.data)
                 Success(result.data)
-            }else{
-                Success(localData.getLastBitcoinInfoSaved())
-                //Failure(ServerException())
+            } else {
+                getLastBitcoinSaved()
             }
         } else {
-            //Get local data when offline
-            Success(localData.getLastBitcoinInfoSaved())
+            getLastBitcoinSaved()
         }
     }
 
-    /*fun getLocalData(): Outcome<BitcoinInfoModel>{
-        val localBitcoinInfo = localData.getLastBitcoinInfoSaved()
-        if(localBitcoinInfo)
-    }*/
+    fun getLastBitcoinSaved(): Outcome<BitcoinInfoModel> {
+        val lastBitcoinSaved = localData.getLastBitcoinInfoSaved()
+
+        return if (lastBitcoinSaved != null) {
+            Success(lastBitcoinSaved)
+        } else {
+            Failure(DatabaseException())
+        }
+    }
 
 }

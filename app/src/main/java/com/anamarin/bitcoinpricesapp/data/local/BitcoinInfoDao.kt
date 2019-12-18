@@ -4,7 +4,7 @@ import com.anamarin.bitcoinpricesapp.data.models.BitcoinInfoModel
 
 interface BitcoinInfoDao {
 
-    fun getLastBitcoinInfoSaved(): BitcoinInfoModel
+    fun getLastBitcoinInfoSaved(): BitcoinInfoModel?
 
     fun saveBitcoinInfo(bitcoinInfoToSave: BitcoinInfoModel)
 }

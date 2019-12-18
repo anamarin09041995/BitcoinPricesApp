@@ -1,5 +1,6 @@
 package com.anamarin.bitcoinpricesapp.data.repositories
 
+import com.anamarin.bitcoinpricesapp.core.error.DatabaseException
 import com.anamarin.bitcoinpricesapp.core.error.ServerException
 import com.anamarin.bitcoinpricesapp.core.networkStatus.NetworkStatus
 import com.anamarin.bitcoinpricesapp.core.result.Failure
@@ -8,10 +9,12 @@ import com.anamarin.bitcoinpricesapp.core.utils.WEEK_PERIOD
 import com.anamarin.bitcoinpricesapp.core.utils.getTestBitcoinInfoModel
 import com.anamarin.bitcoinpricesapp.data.api.BitcoinInfoClient
 import com.anamarin.bitcoinpricesapp.data.local.BitcoinInfoDao
+import com.anamarin.bitcoinpricesapp.data.models.BitcoinInfoModel
 import com.nhaarman.mockitokotlin2.*
 import org.junit.Before
 import junit.framework.TestCase.assertEquals
 import org.junit.Test
+import java.lang.Exception
 
 class BitcoinInfoRepositoryImpTest {
 
@@ -90,7 +93,26 @@ class BitcoinInfoRepositoryImpTest {
         verify(mockLocalData).getLastBitcoinInfoSaved()
         verifyNoMoreInteractions(mockRemoteData)
 
+        assert(result is Success<BitcoinInfoModel>)
         assertEquals((result as Success).data, model)
+    }
+
+    @Test
+    fun isReturningFailure_whenCallToRemoteDataSourceIsUnsuccessfully_andLocalDataIsEmpty() {
+        whenever(mockNetworkStatus.hasNetworkAccess()).thenReturn(true)
+        whenever(mockRemoteData.getBitcoinInfoInPeriod(timestamp)).thenAnswer {
+            Failure(
+                ServerException()
+            )
+        }
+        whenever(mockLocalData.getLastBitcoinInfoSaved()).thenReturn(null)
+
+        val result = repository.fetchBitcoinInfo(quantity, period)
+
+        verify(mockRemoteData).getBitcoinInfoInPeriod(timestamp)
+        verify(mockLocalData).getLastBitcoinInfoSaved()
+
+        assert(result is Failure)
     }
 
     //Offline behavior
