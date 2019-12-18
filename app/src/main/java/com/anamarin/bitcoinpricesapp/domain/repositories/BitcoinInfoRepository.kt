@@ -1,10 +1,10 @@
 package com.anamarin.bitcoinpricesapp.domain.repositories
 
-import com.anamarin.bitcoinpricesapp.domain.entities.BitcoinInfoEntity
-import io.reactivex.Single
+import com.anamarin.bitcoinpricesapp.core.result.Results
+import com.anamarin.bitcoinpricesapp.data.models.BitcoinInfoModel
 
 interface BitcoinInfoRepository {
 
-    fun fetchBitcoinInfo(quantity: Int, period: String): Single<BitcoinInfoEntity>
+    fun fetchBitcoinInfo(quantity: Int, period: String): Results<*>
 
 }

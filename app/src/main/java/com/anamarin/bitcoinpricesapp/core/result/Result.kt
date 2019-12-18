@@ -2,8 +2,11 @@ package com.anamarin.bitcoinpricesapp.core.result
 
 import java.lang.Exception
 
-abstract class Result<T>
+open class Results<out T>{
 
-data class Success<T>(val data: T) : Result<T>()
+    data class Success<out T>(val data: T) : Results<T>()
 
-data class Error(val exception: Exception) : Result<Unit>()
+    data class Failure(val exception: Exception) : Results<Nothing>()
+
+}
+

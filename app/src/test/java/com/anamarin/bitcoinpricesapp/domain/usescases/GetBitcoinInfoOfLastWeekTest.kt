@@ -1,11 +1,20 @@
 package com.anamarin.bitcoinpricesapp.domain.usescases
 
+import com.anamarin.bitcoinpricesapp.core.result.Results
 import com.anamarin.bitcoinpricesapp.core.utils.WEEK_PERIOD
+import com.anamarin.bitcoinpricesapp.data.models.BitcoinCoordinatesModel
+import com.anamarin.bitcoinpricesapp.data.models.BitcoinInfoModel
+import com.anamarin.bitcoinpricesapp.domain.entities.BitcoinInfoEntity
 import com.anamarin.bitcoinpricesapp.domain.repositories.BitcoinInfoRepository
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.whenever
+import junit.framework.TestCase.assertEquals
+import org.junit.Assert.assertSame
 import org.junit.Before
 import org.junit.Test
+import org.mockito.ArgumentMatchers.anyString
+import org.mockito.Mockito
 
 class GetBitcoinPricesOfLasteWeekTest{
 
@@ -21,9 +30,26 @@ class GetBitcoinPricesOfLasteWeekTest{
 
     @Test
     fun callRepositoryMethodWhenUsecaseIsInvoke(){
-        val quantity = 1
         useCase.call()
-        verify(repository).fetchBitcoinInfo(quantity, WEEK_PERIOD)
+        verify(repository).fetchBitcoinInfo(1, WEEK_PERIOD)
     }
 
+    @Test
+    fun getBitcoinInfoSuccessfull(){
+        val bitcoinInfoModel = BitcoinInfoModel(name = "market-prices", unit = "USD", values = (0..6).map {  BitcoinCoordinatesModel(it.toDouble(), it.toDouble()) })
+        val bitcoinInfoEntity = BitcoinInfoEntity(bitcoinInfoModel)
+
+        whenever(repository.fetchBitcoinInfo(Mockito.anyInt(), anyString())).thenReturn(
+            Results.Success(
+                bitcoinInfoModel
+            )
+        )
+
+        val result = useCase.call()
+
+        verify(repository).fetchBitcoinInfo(1, WEEK_PERIOD)
+
+        assert(result is Results.Success)
+        assertEquals((result as Results.Success<BitcoinInfoEntity>).data, bitcoinInfoEntity)
+    }
 }
