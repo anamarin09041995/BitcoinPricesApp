@@ -27,7 +27,7 @@ class GetBitcoinInfoUseCaseTest{
     @Before
     fun setUp(){
         repository = mock()
-        useCase = GetBitcoinInfoUsecase(repository)
+        useCase = GetBitcoinInfoUsecase(repository, 1, WEEK_PERIOD)
     }
 
     @Test
