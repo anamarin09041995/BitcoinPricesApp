@@ -8,3 +8,4 @@ data class BitcoinCoordinatesModel(
     var x: Double,
     var y: Double
 ) : Parcelable
+

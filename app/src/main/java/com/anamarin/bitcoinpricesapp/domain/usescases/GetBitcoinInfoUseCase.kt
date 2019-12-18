@@ -2,7 +2,6 @@ package com.anamarin.bitcoinpricesapp.domain.usescases
 
 import com.anamarin.bitcoinpricesapp.domain.repositories.BitcoinInfoRepository
 
-
 class GetBitcoinInfoUsecase(repository: BitcoinInfoRepository, quantity: Int, period: String): BaseUseCase(repository = repository, quantity = quantity, period = period ){
 
     /*fun call(): Results<BitcoinInfoEntity> {
@@ -14,5 +13,4 @@ class GetBitcoinInfoUsecase(repository: BitcoinInfoRepository, quantity: Int, pe
                 Failure(Exception())
         }
     }*/
-
 }
