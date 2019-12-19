@@ -32,7 +32,8 @@ android {
 }
 def retrofit_version = '2.4.0'
 def lifecycle_version = '2.1.0'
-def room_version = '2.2.2'
+def room_version = '2.2.3'
+def dagger2_version = '2.17'
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -53,6 +54,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
+    implementation "com.squareup.retrofit2:adapter-rxjava:$retrofit_version"
 
     //Arch components
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
@@ -65,5 +67,10 @@ dependencies {
     //Rx
     implementation "io.reactivex.rxjava2:rxjava:2.2.9"
     implementation "io.reactivex.rxjava2:rxandroid:2.1.1"
+
+    //Dependency injection
+    implementation "com.google.dagger:dagger-android:$dagger2_version"
+    kapt "com.google.dagger:dagger-compiler:$dagger2_version"
+    implementation "com.google.dagger:dagger:$dagger2_version"
 
 }

@@ -9,7 +9,7 @@ import com.anamarin.bitcoinpricesapp.core.utils.WEEK_PERIOD
 import com.anamarin.bitcoinpricesapp.core.utils.getTestBitcoinInfoModel
 import com.anamarin.bitcoinpricesapp.core.utils.schedulers.TrampolineSchedulerProvider
 import com.anamarin.bitcoinpricesapp.data.api.BitcoinInfoClient
-import com.anamarin.bitcoinpricesapp.data.local.BitcoinInfoDao
+import com.anamarin.bitcoinpricesapp.data.local.BitcoinInfoLocal
 import com.anamarin.bitcoinpricesapp.data.models.BitcoinInfoModel
 import com.nhaarman.mockitokotlin2.*
 import io.reactivex.Single
@@ -25,7 +25,7 @@ class BitcoinInfoRepositoryImpTest {
 
     private lateinit var repository: BitcoinInfoRepositoryImp
 
-    private lateinit var mockLocalData: BitcoinInfoDao
+    private lateinit var mockLocalData: BitcoinInfoLocal
     private lateinit var mockRemoteData: BitcoinInfoClient
     private lateinit var mockNetworkStatus: NetworkStatus
 

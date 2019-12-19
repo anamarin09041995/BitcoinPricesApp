@@ -6,13 +6,13 @@ import com.anamarin.bitcoinpricesapp.core.result.Failure
 import com.anamarin.bitcoinpricesapp.core.result.Outcome
 import com.anamarin.bitcoinpricesapp.core.result.Success
 import com.anamarin.bitcoinpricesapp.data.api.BitcoinInfoClient
-import com.anamarin.bitcoinpricesapp.data.local.BitcoinInfoDao
+import com.anamarin.bitcoinpricesapp.data.local.BitcoinInfoLocal
 import com.anamarin.bitcoinpricesapp.data.models.BitcoinInfoModel
 import com.anamarin.bitcoinpricesapp.domain.repositories.BitcoinInfoRepository
 import io.reactivex.Single
 
 class BitcoinInfoRepositoryImp(
-    private val localData: BitcoinInfoDao,
+    private val localData: BitcoinInfoLocal,
     private val remoteData: BitcoinInfoClient,
     private val networkStatus: NetworkStatus
 ) : BitcoinInfoRepository {
