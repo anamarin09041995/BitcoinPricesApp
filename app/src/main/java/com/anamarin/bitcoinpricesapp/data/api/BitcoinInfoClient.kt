@@ -9,7 +9,6 @@ import retrofit2.http.Query
 
 interface BitcoinInfoClient {
 
-    fun getBitcoinInfoInPeriod(timestan: String): Outcome<BitcoinInfoModel>
 
     fun getBitcoinInfoInPeriodSingle(name: String, timestamp: String): Single<BitcoinInfoModel>
 

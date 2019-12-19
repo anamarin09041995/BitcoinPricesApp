@@ -1,16 +1,22 @@
 package com.anamarin.bitcoinpricesapp.domain.usescases
 
+import com.anamarin.bitcoinpricesapp.core.error.DatabaseException
+import com.anamarin.bitcoinpricesapp.core.error.ServerException
 import com.anamarin.bitcoinpricesapp.core.result.Success
 import com.anamarin.bitcoinpricesapp.core.result.Failure
+import com.anamarin.bitcoinpricesapp.core.result.Outcome
 import com.anamarin.bitcoinpricesapp.core.utils.WEEK_PERIOD
 import com.anamarin.bitcoinpricesapp.core.utils.getTestBitcoinInfoEntity
 import com.anamarin.bitcoinpricesapp.core.utils.getTestBitcoinInfoModel
+import com.anamarin.bitcoinpricesapp.data.repositories.CHART_NAME
 import com.anamarin.bitcoinpricesapp.domain.entities.BitcoinInfoEntity
 import com.anamarin.bitcoinpricesapp.domain.repositories.BitcoinInfoRepository
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
 import com.nhaarman.mockitokotlin2.whenever
+import io.reactivex.Single
+import io.reactivex.observers.TestObserver
 import junit.framework.TestCase.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -28,6 +34,8 @@ class GetBitcoinInfoUseCaseTest {
 
     private val period: String = WEEK_PERIOD
 
+    private val name: String = CHART_NAME
+
     @Before
     fun setUp() {
         repository = mock()
@@ -35,43 +43,34 @@ class GetBitcoinInfoUseCaseTest {
     }
 
     @Test
-    fun callRepositoryMethodWhenUsecaseIsInvoke() {
-        useCase.call(quantity, period)
-        verify(repository).fetchBitcoinInfo(Mockito.anyInt(), anyString())
-    }
-
-    @Test
     fun getBitcoinInfoSuccessfully() {
+        val bitcoinInfoModel = getTestBitcoinInfoModel()
+        val bitcoinInfoEntity = getTestBitcoinInfoEntity(bitcoinInfoModel)
+        val singleBitcoinInfoModel = Single.just(Success(bitcoinInfoModel))
 
-        val model = getTestBitcoinInfoModel()
-        val entity = getTestBitcoinInfoEntity(model)
+        Mockito.doReturn(singleBitcoinInfoModel).`when`(repository).fetchBitcoinInfoSingle(quantity, period, name)
 
-        whenever(repository.fetchBitcoinInfo(Mockito.anyInt(), anyString())).thenReturn(
-            Success(
-                model
-            )
-        )
+        val testObserver: TestObserver<Outcome<BitcoinInfoEntity>> = useCase.callSingle(quantity, period, name).test()
 
-        val result = useCase.call(quantity, period)
+        verify(repository).fetchBitcoinInfoSingle(quantity,period,name)
 
-        verify(repository).fetchBitcoinInfo(quantity,period)
-        verifyNoMoreInteractions(repository)
+        testObserver.assertValues(Success(bitcoinInfoEntity))
 
-        assert(result is Success)
-        assertEquals((result as Success<BitcoinInfoEntity>).data, entity)
+        testObserver.dispose()
     }
 
     @Test
-    fun getBitcoinInfoFailure() {
-        whenever(repository.fetchBitcoinInfo(quantity, period)).thenReturn(
-            Failure(Exception())
-        )
-        val result = useCase.call(quantity, period)
+    fun getBitcoinInfoFailure(){
+        val mockLocalFailure = Single.error<Exception>(DatabaseException())
 
-        verify(repository).fetchBitcoinInfo(quantity, period)
-        verifyNoMoreInteractions(repository)
+        Mockito.doReturn(mockLocalFailure).`when`(repository).fetchBitcoinInfoSingle(quantity, period, name)
 
-        assertEquals(result, (result as Failure))
+        val testObserver: TestObserver<Outcome<BitcoinInfoEntity>> = useCase.callSingle(quantity, period, name).test()
 
+        verify(repository).fetchBitcoinInfoSingle(quantity, period, name)
+
+        testObserver.assertValue { it is Failure }
+
+        testObserver.dispose()
     }
 }

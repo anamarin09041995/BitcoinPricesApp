@@ -7,8 +7,6 @@ import io.reactivex.Single
 
 interface BitcoinInfoRepository {
 
-    fun fetchBitcoinInfo(quantity: Int, period: String): Outcome<BitcoinInfoModel>
-
     fun fetchBitcoinInfoSingle(
         quantity: Int,
         period: String,
