@@ -30,6 +30,3 @@ class AppViewModelFactory @Inject constructor(private val creators: Map<Class<ou
 inline fun <reified T : ViewModel> AppCompatActivity.buildViewModel(factory: ViewModelProvider.Factory): T
         = ViewModelProviders.of(this, factory).get(T::class.java)
 
-
-inline fun <reified T : ViewModel> Fragment.buildViewModel(factory: ViewModelProvider.Factory): T
-        = ViewModelProviders.of(this, factory).get(T::class.java)

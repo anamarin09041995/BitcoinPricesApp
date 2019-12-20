@@ -1,7 +1,6 @@
 package com.anamarin.bitcoinpricesapp.domain.usescases
 
 import com.anamarin.bitcoinpricesapp.core.error.DatabaseException
-import com.anamarin.bitcoinpricesapp.core.error.ServerException
 import com.anamarin.bitcoinpricesapp.core.result.Success
 import com.anamarin.bitcoinpricesapp.core.result.Failure
 import com.anamarin.bitcoinpricesapp.core.result.Outcome
@@ -13,14 +12,10 @@ import com.anamarin.bitcoinpricesapp.domain.entities.BitcoinInfoEntity
 import com.anamarin.bitcoinpricesapp.domain.repositories.BitcoinInfoRepository
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
-import com.nhaarman.mockitokotlin2.whenever
 import io.reactivex.Single
 import io.reactivex.observers.TestObserver
-import junit.framework.TestCase.assertEquals
 import org.junit.Before
 import org.junit.Test
-import org.mockito.ArgumentMatchers.anyString
 import org.mockito.Mockito
 import java.lang.Exception
 

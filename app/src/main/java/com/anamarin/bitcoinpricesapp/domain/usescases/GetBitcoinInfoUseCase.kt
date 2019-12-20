@@ -1,17 +1,21 @@
 package com.anamarin.bitcoinpricesapp.domain.usescases
 
+import com.anamarin.bitcoinpricesapp.core.result.Failure
+import com.anamarin.bitcoinpricesapp.core.result.Outcome
+import com.anamarin.bitcoinpricesapp.core.result.Success
+import com.anamarin.bitcoinpricesapp.domain.entities.BitcoinInfoEntity
 import com.anamarin.bitcoinpricesapp.domain.repositories.BitcoinInfoRepository
+import io.reactivex.Single
 import javax.inject.Inject
 
-class GetBitcoinInfoUsecase @Inject constructor(repository: BitcoinInfoRepository): BaseUseCase(repository = repository){
+open class GetBitcoinInfoUsecase @Inject constructor(repository: BitcoinInfoRepository) : BaseUseCase(repository = repository) {
 
-    /*fun call(): Results<BitcoinInfoEntity> {
-        val result = repository.fetchBitcoinInfo(quantity, WEEK_PERIOD)
-        return if (result is Success<*>) {
-            val entity = BitcoinInfoEntity(result.data as BitcoinInfoModel)
-            Success(entity)
-        } else {
-                Failure(Exception())
-        }
-    }*/
+    override fun callSingle(quantity: Int, period: String, name: String): Single<Outcome<BitcoinInfoEntity>> {
+        return repository.fetchBitcoinInfoSingle(quantity, period, name)
+            .map {
+                Success(BitcoinInfoEntity((it as Success).data)) as Outcome<BitcoinInfoEntity>
+            }.onErrorResumeNext {
+                Single.fromCallable { Failure(Exception()) }
+            }
+    }
 }

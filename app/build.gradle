@@ -17,7 +17,7 @@ android {
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-    dataBinding{
+    dataBinding {
         enabled = true
     }
     buildTypes {
@@ -26,14 +26,17 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-    androidExtensions {
-        experimental = true
-    }
+
 }
+androidExtensions {
+    experimental = true
+}
+
 def retrofit_version = '2.6.0'
 def lifecycle_version = '2.1.0'
 def room_version = '2.2.3'
 def dagger2_version = '2.16'
+
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -44,11 +47,12 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
+    //RxKotlin
+    implementation 'com.github.ReactiveX:RxKotlin:2.x-SNAPSHOT'
     //Test
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.mockito:mockito-core:2.23.0'
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.1.0"
-
 
     //Retrofit
     implementation 'com.google.code.gson:gson:2.8.5'
@@ -65,13 +69,18 @@ dependencies {
     kapt "androidx.room:room-compiler:$room_version"
 
     //Rx
-    implementation "io.reactivex.rxjava2:rxjava:2.2.9"
+    implementation "io.reactivex.rxjava2:rxjava:2.2.10"
     implementation "io.reactivex.rxjava2:rxandroid:2.1.1"
 
     //Dependency injection
     implementation "com.google.dagger:dagger-android:$dagger2_version"
-    implementation "com.google.dagger:dagger:$dagger2_version"
     kapt "com.google.dagger:dagger-compiler:$dagger2_version"
     kapt "com.google.dagger:dagger-android-processor:$dagger2_version"
+
+    //Chart
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+    implementation 'ir.farshid_roohi:linegraph:0.1.1'
+    implementation 'com.google.android.material:material:1.0.0'
+
 
 }
