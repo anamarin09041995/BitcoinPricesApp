@@ -1,7 +1,6 @@
 package com.anamarin.bitcoinpricesapp.data.api
 
-import com.anamarin.bitcoinpricesapp.core.utils.getTestBitcoinInfoModel
-import com.anamarin.bitcoinpricesapp.data.models.BitcoinInfoModel
+import com.anamarin.bitcoinpricesapp.core.utils.getBitcoinInfoDTOTest
 import com.anamarin.bitcoinpricesapp.data.repositories.CHART_NAME
 import com.nhaarman.mockitokotlin2.mock
 import io.reactivex.Single
@@ -27,15 +26,15 @@ class BitcoinInfoClientTest{
 
     @Test
     fun returnBitcoinInfo_WhenServiceResponseSuccessfully(){
-        val bitcoinModel = getTestBitcoinInfoModel()
-        val singleBitcoinInfoModel = Single.just(bitcoinModel)
+        val bitcoinDTO: BitcoinChartDTO = getBitcoinInfoDTOTest()
+        val singleBitcoinInfoDTO = Single.just(bitcoinDTO)
 
-        Mockito.doReturn(singleBitcoinInfoModel).`when`(mockRetrofit).getBitcoinInfoForPeriod(name, timestamp)
+        Mockito.doReturn(singleBitcoinInfoDTO).`when`(mockRetrofit).getBitcoinInfoForPeriod(name, timestamp)
 
-        val testObserver: TestObserver<BitcoinInfoModel> =
+        val testObserver: TestObserver<BitcoinChartDTO> =
             bitcoinInfoClientImp.getBitcoinInfoInPeriodSingle(name, timestamp).test()
 
-        testObserver.assertValues(bitcoinModel)
+        testObserver.assertValues(bitcoinDTO)
     }
 
     @Test
@@ -45,7 +44,7 @@ class BitcoinInfoClientTest{
 
         Mockito.doReturn(remoteException).`when`(mockRetrofit).getBitcoinInfoForPeriod(name, timestamp)
 
-        val testObserver: TestObserver<BitcoinInfoModel> =
+        val testObserver: TestObserver<BitcoinChartDTO> =
             bitcoinInfoClientImp.getBitcoinInfoInPeriodSingle(name, timestamp).test()
 
         testObserver.assertError(exception)

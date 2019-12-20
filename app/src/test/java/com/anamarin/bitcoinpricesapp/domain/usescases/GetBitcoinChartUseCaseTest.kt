@@ -5,8 +5,9 @@ import com.anamarin.bitcoinpricesapp.core.result.Success
 import com.anamarin.bitcoinpricesapp.core.result.Failure
 import com.anamarin.bitcoinpricesapp.core.result.Outcome
 import com.anamarin.bitcoinpricesapp.core.utils.WEEK_PERIOD
-import com.anamarin.bitcoinpricesapp.core.utils.getTestBitcoinInfoEntity
-import com.anamarin.bitcoinpricesapp.core.utils.getTestBitcoinInfoModel
+import com.anamarin.bitcoinpricesapp.core.utils.getBitcoinInfoModelTest
+import com.anamarin.bitcoinpricesapp.core.utils.getListBitcoinCoordinatesModelTest
+import com.anamarin.bitcoinpricesapp.data.models.BitcoinChart
 import com.anamarin.bitcoinpricesapp.data.repositories.CHART_NAME
 import com.anamarin.bitcoinpricesapp.domain.entities.BitcoinInfoEntity
 import com.anamarin.bitcoinpricesapp.domain.repositories.BitcoinInfoRepository
@@ -39,9 +40,9 @@ class GetBitcoinInfoUseCaseTest {
 
     @Test
     fun getBitcoinInfoSuccessfully() {
-        val bitcoinInfoModel = getTestBitcoinInfoModel()
-        val bitcoinInfoEntity = getTestBitcoinInfoEntity(bitcoinInfoModel)
-        val singleBitcoinInfoModel = Single.just(Success(bitcoinInfoModel))
+        val bitcoinChart = BitcoinChart(getBitcoinInfoModelTest(), getListBitcoinCoordinatesModelTest())
+        val bitcoinInfoEntity = BitcoinInfoEntity(bitcoinChart)
+        val singleBitcoinInfoModel = Single.just(Success(bitcoinChart))
 
         Mockito.doReturn(singleBitcoinInfoModel).`when`(repository).fetchBitcoinInfoSingle(quantity, period, name)
 
