@@ -1,13 +1,13 @@
 package com.anamarin.bitcoinpricesapp.domain.entities
 
+import com.anamarin.bitcoinpricesapp.data.models.BitcoinChart
 import com.anamarin.bitcoinpricesapp.data.models.BitcoinCoordinatesModel
-import com.anamarin.bitcoinpricesapp.data.models.BitcoinInfoModel
 
-class BitcoinInfoEntity(bitcoinInfoModel: BitcoinInfoModel) {
+class BitcoinInfoEntity(bitcoinChart: BitcoinChart) {
 
-    private val name: String = bitcoinInfoModel.name
-    private val unit: String = bitcoinInfoModel.unit
-    private val values: List<BitcoinCoordinatesModel> = bitcoinInfoModel.values
+    private val name: String = bitcoinChart.info.name
+    private val unit: String = bitcoinChart.info.unit
+    private val values: List<BitcoinCoordinatesModel> = bitcoinChart.values
 
     override fun equals(other: Any?): Boolean {
         val otherEntity = other as BitcoinInfoEntity

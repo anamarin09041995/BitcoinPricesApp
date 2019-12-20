@@ -7,7 +7,7 @@ import com.anamarin.bitcoinpricesapp.core.result.Outcome
 import com.anamarin.bitcoinpricesapp.core.result.Success
 import com.anamarin.bitcoinpricesapp.data.api.BitcoinInfoClient
 import com.anamarin.bitcoinpricesapp.data.local.BitcoinInfoLocal
-import com.anamarin.bitcoinpricesapp.data.models.BitcoinInfoModel
+import com.anamarin.bitcoinpricesapp.data.models.BitcoinChart
 import com.anamarin.bitcoinpricesapp.domain.repositories.BitcoinInfoRepository
 import io.reactivex.Single
 import javax.inject.Inject
@@ -22,15 +22,16 @@ class BitcoinInfoRepositoryImp @Inject constructor(
         quantity: Int,
         period: String,
         name: String
-    ): Single<Outcome<BitcoinInfoModel>> {
+    ): Single<Outcome<BitcoinChart>> {
         val quantityString: String = quantity.toString()
         val timestamp: String = quantityString + period
 
         return if (networkStatus.hasNetworkAccess()) {
             remoteData.getBitcoinInfoInPeriodSingle(name, timestamp)
                 .map {
-                    localData.saveBitcoinInfo(it)
-                    Success(it) as Outcome<BitcoinInfoModel>
+                    val bitcoinChart = BitcoinChart(it, it.values)
+                    localData.saveBitcoinInfo(bitcoinChart)
+                    Success(bitcoinChart) as Outcome<BitcoinChart>
                 }
                 .onErrorResumeNext {
                     Single.fromCallable { getLastBitcoinSaved() }
@@ -41,7 +42,7 @@ class BitcoinInfoRepositoryImp @Inject constructor(
     }
 
 
-    fun getLastBitcoinSaved(): Outcome<BitcoinInfoModel> {
+    private fun getLastBitcoinSaved(): Outcome<BitcoinChart> {
         val lastBitcoinSaved = localData.getLastBitcoinInfoSaved()
 
         return if (lastBitcoinSaved != null) {

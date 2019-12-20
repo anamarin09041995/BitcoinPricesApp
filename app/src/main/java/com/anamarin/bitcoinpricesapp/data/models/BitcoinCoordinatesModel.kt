@@ -10,7 +10,8 @@ import kotlinx.android.parcel.Parcelize
 data class BitcoinCoordinatesModel(
     @PrimaryKey
     val id: Long,
-    var x: Double,
-    var y: Double
+    val bitcoinInfoId: Long,
+    val x: Double,
+    val y: Double
 ) : Parcelable
 

@@ -101,14 +101,14 @@ class BitcoinInfoRepositoryImpTest {
         whenever(mockNetworkStatus.hasNetworkAccess()).thenReturn(true)
         Mockito.doReturn(mockRemoteFailure).`when`(mockRemoteData)
             .getBitcoinInfoInPeriodSingle(name, timestamp)
-        Mockito.doReturn(model).`when`(mockLocalData).getLastBitcoinInfoSaved()
+        Mockito.doReturn(model).`when`(mockLocalData).getLastBitcoinInfoSaved(quantity, period)
 
         val testObserver: TestObserver<Outcome<BitcoinInfoModel>> =
             repository.fetchBitcoinInfoSingle(quantity, period, name).test()
 
         verify(mockNetworkStatus).hasNetworkAccess()
         verify(mockRemoteData).getBitcoinInfoInPeriodSingle(name, timestamp)
-        verify(mockLocalData).getLastBitcoinInfoSaved()
+        verify(mockLocalData).getLastBitcoinInfoSaved(quantity, period)
         verifyNoMoreInteractions(mockRemoteData)
         verifyNoMoreInteractions(mockLocalData)
 
@@ -125,14 +125,14 @@ class BitcoinInfoRepositoryImpTest {
 
         whenever(mockNetworkStatus.hasNetworkAccess()).thenReturn(true)
         Mockito.doReturn(mockRemoteFailure).`when`(mockRemoteData).getBitcoinInfoInPeriodSingle(name, timestamp)
-        Mockito.doReturn(null).`when`(mockLocalData).getLastBitcoinInfoSaved()
+        Mockito.doReturn(null).`when`(mockLocalData).getLastBitcoinInfoSaved(quantity, period)
 
         val testObserver: TestObserver<Outcome<BitcoinInfoModel>> =
             repository.fetchBitcoinInfoSingle(quantity, period, name).test()
 
         verify(mockNetworkStatus).hasNetworkAccess()
         verify(mockRemoteData).getBitcoinInfoInPeriodSingle(name, timestamp)
-        verify(mockLocalData).getLastBitcoinInfoSaved()
+        verify(mockLocalData).getLastBitcoinInfoSaved(quantity, period)
 
         testObserver.assertValue { it is Failure }
 
@@ -145,13 +145,13 @@ class BitcoinInfoRepositoryImpTest {
     @Test
     fun returnDataFromLocalSource() {
         whenever(mockNetworkStatus.hasNetworkAccess()).thenReturn(false)
-        Mockito.doReturn(model).`when`(mockLocalData).getLastBitcoinInfoSaved()
+        Mockito.doReturn(model).`when`(mockLocalData).getLastBitcoinInfoSaved(quantity, period)
 
         val testObserver: TestObserver<Outcome<BitcoinInfoModel>> =
             repository.fetchBitcoinInfoSingle(quantity, period, name).test()
 
         verify(mockNetworkStatus).hasNetworkAccess()
-        verify(mockLocalData).getLastBitcoinInfoSaved()
+        verify(mockLocalData).getLastBitcoinInfoSaved(quantity, period)
         verifyZeroInteractions(mockRemoteData)
 
         testObserver.assertValues(Success(model))
@@ -162,13 +162,13 @@ class BitcoinInfoRepositoryImpTest {
     @Test
     fun returnFailureWhenLocalSourceIsEmpty() {
         whenever(mockNetworkStatus.hasNetworkAccess()).thenReturn(false)
-        Mockito.doReturn(null).`when`(mockLocalData).getLastBitcoinInfoSaved()
+        Mockito.doReturn(null).`when`(mockLocalData).getLastBitcoinInfoSaved(quantity, period)
 
         val testObserver: TestObserver<Outcome<BitcoinInfoModel>> =
             repository.fetchBitcoinInfoSingle(quantity, period, name).test()
 
         verify(mockNetworkStatus).hasNetworkAccess()
-        verify(mockLocalData).getLastBitcoinInfoSaved()
+        verify(mockLocalData).getLastBitcoinInfoSaved(quantity, period)
         verifyZeroInteractions(mockRemoteData)
 
         testObserver.assertValue { it is Failure }
