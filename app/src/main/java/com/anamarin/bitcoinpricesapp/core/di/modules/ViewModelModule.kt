@@ -2,7 +2,7 @@ package com.anamarin.bitcoinpricesapp.core.di.modules
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.anamarin.bitcoinpricesapp.core.utils.viewModelUtil.ViewModelFactory
+import com.anamarin.bitcoinpricesapp.core.utils.viewModelUtil.AppViewModelFactory
 import com.anamarin.bitcoinpricesapp.presentation.viewmodels.MainViewModel
 import dagger.Binds
 import dagger.MapKey
@@ -19,10 +19,10 @@ internal annotation class ViewModelKey(val value: KClass<out ViewModel>)
 abstract class ViewModelModule {
 
     @Binds
-    internal abstract fun bindViewModelFactory(factory: ViewModelFactory): ViewModelProvider.Factory
+    abstract fun bindViewModelFactory(factory: AppViewModelFactory): ViewModelProvider.Factory
 
     @Binds
     @IntoMap
     @ViewModelKey(MainViewModel::class)
-    internal abstract fun postListViewModel(viewModel: MainViewModel): ViewModel
+    internal abstract fun mainViewModel(viewModel: MainViewModel): ViewModel
 }
