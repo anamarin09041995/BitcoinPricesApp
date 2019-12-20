@@ -3,6 +3,7 @@ package com.anamarin.bitcoinpricesapp.data.api
 import com.anamarin.bitcoinpricesapp.data.models.BitcoinCoordinatesModel
 import com.anamarin.bitcoinpricesapp.data.models.BitcoinInfoModel
 
+// Api response
 class BitcoinChartDTO(
     status: String,
     name: String,

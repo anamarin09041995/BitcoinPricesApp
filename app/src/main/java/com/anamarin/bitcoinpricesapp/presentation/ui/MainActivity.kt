@@ -63,19 +63,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getData(period: String) {
-        viewModel.getBitcoinInfo(1, period, CHART_NAME)
-
-//            .subscribeBy(
-//                onSuccess = {
-//                    if (it is Success) {
-//                        entity = it.data
-//                        generateChart()
-//                    }
-//                }, onError = {
-//                    "There was an error".toast(this)
-//                }
-//            )
-
+        disposable add viewModel.getBitcoinInfo(1, period, CHART_NAME)
+            .subscribeBy(
+                onSuccess = {
+                    if (it is Success) {
+                        entity = it.data
+                        generateChart()
+                    }
+                }
+            )
     }
 
     private fun generateChart() {

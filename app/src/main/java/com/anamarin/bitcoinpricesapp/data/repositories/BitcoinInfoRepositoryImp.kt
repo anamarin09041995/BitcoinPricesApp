@@ -8,6 +8,7 @@ import com.anamarin.bitcoinpricesapp.core.result.Success
 import com.anamarin.bitcoinpricesapp.data.api.BitcoinInfoClient
 import com.anamarin.bitcoinpricesapp.data.local.BitcoinInfoLocal
 import com.anamarin.bitcoinpricesapp.data.models.BitcoinChart
+import com.anamarin.bitcoinpricesapp.data.models.BitcoinInfoModel
 import com.anamarin.bitcoinpricesapp.domain.repositories.BitcoinInfoRepository
 import io.reactivex.Single
 import javax.inject.Inject

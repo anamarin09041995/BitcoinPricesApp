@@ -8,9 +8,9 @@ import kotlinx.android.parcel.Parcelize
 @Entity
 @Parcelize
 data class BitcoinCoordinatesModel(
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     val id: Long,
-    val bitcoinInfoId: Long,
+    val bitcoinInfoId: Long, // foreign key
     val x: Double,
     val y: Double
 ) : Parcelable

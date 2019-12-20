@@ -5,9 +5,9 @@ import com.anamarin.bitcoinpricesapp.data.models.BitcoinCoordinatesModel
 
 class BitcoinInfoEntity(bitcoinChart: BitcoinChart) {
 
-    private val name: String = bitcoinChart.info.name
-    private val unit: String = bitcoinChart.info.unit
-    private val values: List<BitcoinCoordinatesModel> = bitcoinChart.values
+    val name: String = bitcoinChart.info.name
+    val unit: String = bitcoinChart.info.unit
+    val values: List<BitcoinCoordinatesModel> = bitcoinChart.values
 
     override fun equals(other: Any?): Boolean {
         val otherEntity = other as BitcoinInfoEntity
