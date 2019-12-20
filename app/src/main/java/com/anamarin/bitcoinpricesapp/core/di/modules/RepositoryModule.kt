@@ -64,8 +64,6 @@ class RepositoryModule {
         return BitcoinInfoLocalImp(database.bitcoinInfoDao())
     }
 
-
-
     @Provides
     fun provideBitcoinRepository(
         retrofitClient: BitcoinInfoClient,
@@ -75,16 +73,4 @@ class RepositoryModule {
         return BitcoinInfoRepositoryImp(local, retrofitClient, networkStatus)
     }
 
-
-//    @Binds
-//    abstract fun provideNetworkStatus(networkStatusImp: NetworkStatusImp): NetworkStatus
-//
-//    @Binds
-//    abstract fun provideBitcoinInfoLocal(bitcoinInfoLocalImp: BitcoinInfoLocalImp): BitcoinInfoLocal
-//
-//    @Binds
-//    abstract fun provideBitcoinInfoClient(bitcoinInfoClientImp: BitcoinInfoClientImp): BitcoinInfoClient
-//
-//    @Binds
-//    abstract fun provideBitcoinRepository(impl: BitcoinInfoRepositoryImp): BitcoinInfoRepository
 }

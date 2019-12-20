@@ -19,12 +19,6 @@ class App : Application(), HasActivityInjector {
         configureDagger()
     }
 
-//    override fun applicationInjector(): AndroidInjector<App> {
-//        return DaggerAppComponent
-//            .builder()
-//            .build()
-//    }
-
     private fun configureDagger() {
         DaggerAppComponent
             .builder()
