@@ -6,10 +6,11 @@ import androidx.room.PrimaryKey
 import kotlinx.android.parcel.Parcelize
 
 @Entity
+@Parcelize
 data class BitcoinCoordinatesModel(
     @PrimaryKey
     val id: Long,
     var x: Double,
     var y: Double
-)
+) : Parcelable
 

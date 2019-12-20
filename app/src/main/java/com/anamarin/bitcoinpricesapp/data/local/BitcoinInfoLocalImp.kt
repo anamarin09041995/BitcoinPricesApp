@@ -3,14 +3,14 @@ package com.anamarin.bitcoinpricesapp.data.local
 import com.anamarin.bitcoinpricesapp.data.models.BitcoinInfoModel
 import javax.inject.Inject
 
-class BitcoinInfoLocalImp @Inject constructor(private val local: BitcoinInfoDao): BitcoinInfoLocal{
+class BitcoinInfoLocalImp @Inject constructor(private val dao: BitcoinInfoDao): BitcoinInfoLocal{
 
     override fun getLastBitcoinInfoSaved(): BitcoinInfoModel? {
-        return local.getLastBitcoinInfoSaved()
+        return dao.getLastBitcoinInfoSaved()
     }
 
     override fun saveBitcoinInfo(bitcoinInfoToSave: BitcoinInfoModel) {
-        return local.saveBitcoinInfo(bitcoinInfoToSave)
+        return dao.saveBitcoinInfo(bitcoinInfoToSave)
     }
 
 }

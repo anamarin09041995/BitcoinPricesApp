@@ -10,16 +10,14 @@ import com.anamarin.bitcoinpricesapp.data.api.BitcoinInfoClient
 import com.anamarin.bitcoinpricesapp.data.api.BitcoinInfoClientImp
 import com.anamarin.bitcoinpricesapp.data.api.BitcoinRetrofitClient
 import com.anamarin.bitcoinpricesapp.data.local.AppDatabase
-import com.anamarin.bitcoinpricesapp.data.local.BitcoinInfoDao
 import com.anamarin.bitcoinpricesapp.data.local.BitcoinInfoLocal
 import com.anamarin.bitcoinpricesapp.data.local.BitcoinInfoLocalImp
 import com.anamarin.bitcoinpricesapp.data.repositories.BitcoinInfoRepositoryImp
 import com.anamarin.bitcoinpricesapp.domain.repositories.BitcoinInfoRepository
-import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
@@ -30,8 +28,8 @@ class RepositoryModule {
     @Singleton
     fun providesRetrofitInstance(): Retrofit {
         return Retrofit.Builder()
-            .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .baseUrl(BASE_URL)
             .build()
     }

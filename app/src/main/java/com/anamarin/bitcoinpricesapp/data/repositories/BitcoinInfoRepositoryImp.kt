@@ -28,8 +28,6 @@ class BitcoinInfoRepositoryImp @Inject constructor(
 
         return if (networkStatus.hasNetworkAccess()) {
             remoteData.getBitcoinInfoInPeriodSingle(name, timestamp)
-                /*.subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())*/
                 .map {
                     localData.saveBitcoinInfo(it)
                     Success(it) as Outcome<BitcoinInfoModel>

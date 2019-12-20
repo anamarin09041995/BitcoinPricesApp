@@ -8,6 +8,7 @@ import androidx.room.TypeConverters
 import com.google.gson.Gson
 import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 class BitcoinInfoModel(
 
     var id: Long? = 0,
@@ -18,7 +19,7 @@ class BitcoinInfoModel(
     var description: String? = null,
 
     var values: List<BitcoinCoordinatesModel> = listOf()
-)
+) : Parcelable
 
 
 class BitcoinCoordinatesModelConverter {

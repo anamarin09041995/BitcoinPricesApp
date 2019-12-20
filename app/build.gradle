@@ -30,7 +30,7 @@ android {
         experimental = true
     }
 }
-def retrofit_version = '2.4.0'
+def retrofit_version = '2.6.0'
 def lifecycle_version = '2.1.0'
 def room_version = '2.2.3'
 def dagger2_version = '2.16'
@@ -54,7 +54,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
-    implementation "com.squareup.retrofit2:adapter-rxjava:$retrofit_version"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofit_version"
 
     //Arch components
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"

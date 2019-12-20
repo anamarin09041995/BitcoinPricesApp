@@ -7,7 +7,7 @@ import com.anamarin.bitcoinpricesapp.data.models.BitcoinInfoModel
 abstract class BitcoinInfoDao {
 
     fun getLastBitcoinInfoSaved(): BitcoinInfoModel? {
-        return  BitcoinInfoModel()
+        return  null
     }
 
     fun saveBitcoinInfo(bitcoinInfoToSave: BitcoinInfoModel) {}
