@@ -4,8 +4,9 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
+import javax.inject.Inject
 
-class NetworkStatusImp(context: Context): NetworkStatus{
+class NetworkStatusImp @Inject constructor(context: Context): NetworkStatus{
 
     private val appContext: Context = context
 

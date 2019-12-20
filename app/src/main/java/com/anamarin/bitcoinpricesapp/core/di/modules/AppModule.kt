@@ -1,18 +1,17 @@
 package com.anamarin.bitcoinpricesapp.core.di.modules
 
-import android.app.Application
 import android.content.Context
-
+import com.anamarin.bitcoinpricesapp.App
 import dagger.Module
 import dagger.Provides
+import javax.inject.Scope
 import javax.inject.Singleton
 
 @Module
 class AppModule{
 
     @Provides
-    @Singleton
-    fun provideContext(context: Context) : Application{
-        return  context.applicationContext as Application
+    fun provideContext(context: App) : Context {
+        return  context
     }
 }

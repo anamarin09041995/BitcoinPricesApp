@@ -10,10 +10,12 @@ import com.anamarin.bitcoinpricesapp.data.api.BitcoinInfoClient
 import com.anamarin.bitcoinpricesapp.data.api.BitcoinInfoClientImp
 import com.anamarin.bitcoinpricesapp.data.api.BitcoinRetrofitClient
 import com.anamarin.bitcoinpricesapp.data.local.AppDatabase
+import com.anamarin.bitcoinpricesapp.data.local.BitcoinInfoDao
 import com.anamarin.bitcoinpricesapp.data.local.BitcoinInfoLocal
 import com.anamarin.bitcoinpricesapp.data.local.BitcoinInfoLocalImp
 import com.anamarin.bitcoinpricesapp.data.repositories.BitcoinInfoRepositoryImp
 import com.anamarin.bitcoinpricesapp.domain.repositories.BitcoinInfoRepository
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit
@@ -22,7 +24,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
 @Module
-class RepositoryModule(appContext: Context) {
+class RepositoryModule {
 
     @Provides
     @Singleton
@@ -36,39 +38,55 @@ class RepositoryModule(appContext: Context) {
 
     @Singleton
     @Provides
-    fun provideDatabase(context: Context?): AppDatabase? {
-        return Room.databaseBuilder<AppDatabase>(
-            context!!,
-            AppDatabase::class.java, DATABASE_NAME
-        )
+    fun provideBitcoinRetrofitClient(retrofit: Retrofit): BitcoinRetrofitClient {
+        return retrofit.create(BitcoinRetrofitClient::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideBitcoinInfoClient(retrofit: BitcoinRetrofitClient): BitcoinInfoClient {
+        return BitcoinInfoClientImp(retrofit)
+    }
+
+    @Provides
+    fun generateDatabase(context: Context): AppDatabase {
+        return Room.databaseBuilder<AppDatabase>(context.applicationContext, AppDatabase::class.java, DATABASE_NAME)
             .fallbackToDestructiveMigration()
             .allowMainThreadQueries()
             .build()
     }
 
     @Provides
-    fun networkStatus(context: Context?): NetworkStatus{
-        return NetworkStatusImp(context!!)
+    fun networkStatus(context: Context): NetworkStatus {
+        return NetworkStatusImp(context)
     }
 
     @Provides
-    fun provideBitcoinDao(appDatabase: AppDatabase): BitcoinInfoLocal {
-        return BitcoinInfoLocalImp(appDatabase.bitcoinInfoDao())
+    fun provideBitcoinInfoLocal(database: AppDatabase): BitcoinInfoLocal {
+        return BitcoinInfoLocalImp(database.bitcoinInfoDao())
     }
 
-    @Singleton
-    fun provideBitcoinRetrofitClient(retrofit: Retrofit): BitcoinRetrofitClient {
-        return retrofit.create(BitcoinRetrofitClient::class.java)
-    }
 
-    @Singleton
-    fun provideBitcoinInfoClient(retrofit: BitcoinRetrofitClient): BitcoinInfoClient {
-        return BitcoinInfoClientImp(retrofit)
-    }
 
     @Provides
-    fun provideBitcoinRepository(retrofitClient: BitcoinInfoClient, local: BitcoinInfoLocal, networkStatus: NetworkStatus ): BitcoinInfoRepository {
+    fun provideBitcoinRepository(
+        retrofitClient: BitcoinInfoClient,
+        local: BitcoinInfoLocal,
+        networkStatus: NetworkStatus
+    ): BitcoinInfoRepository {
         return BitcoinInfoRepositoryImp(local, retrofitClient, networkStatus)
     }
 
+
+//    @Binds
+//    abstract fun provideNetworkStatus(networkStatusImp: NetworkStatusImp): NetworkStatus
+//
+//    @Binds
+//    abstract fun provideBitcoinInfoLocal(bitcoinInfoLocalImp: BitcoinInfoLocalImp): BitcoinInfoLocal
+//
+//    @Binds
+//    abstract fun provideBitcoinInfoClient(bitcoinInfoClientImp: BitcoinInfoClientImp): BitcoinInfoClient
+//
+//    @Binds
+//    abstract fun provideBitcoinRepository(impl: BitcoinInfoRepositoryImp): BitcoinInfoRepository
 }

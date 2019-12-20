@@ -7,3 +7,5 @@ const val YEAR_PERIOD = "years"
 const val BASE_URL: String = "https://api.blockchain.info"
 
 const val DATABASE_NAME: String = "bitcoinDB"
+
+const val CHART_NAME = "market-price"

@@ -1,7 +1,6 @@
 package com.anamarin.bitcoinpricesapp.domain.repositories
 
 import com.anamarin.bitcoinpricesapp.core.result.Outcome
-import com.anamarin.bitcoinpricesapp.core.utils.schedulers.BaseSchedulerProvider
 import com.anamarin.bitcoinpricesapp.data.models.BitcoinInfoModel
 import io.reactivex.Single
 

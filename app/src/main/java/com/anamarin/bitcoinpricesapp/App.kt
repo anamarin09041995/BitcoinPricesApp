@@ -2,30 +2,40 @@ package com.anamarin.bitcoinpricesapp
 
 import android.app.Activity
 import android.app.Application
-import com.anamarin.bitcoinpricesapp.core.di.AppComponent
-import com.anamarin.bitcoinpricesapp.core.di.modules.AppModule
-import com.anamarin.bitcoinpricesapp.core.di.DaggerAppComponent
+import com.anamarin.bitcoinpricesapp.core.di.components.DaggerAppComponent
 import dagger.android.AndroidInjector
+import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector
+import javax.inject.Inject
 
-@Suppress("DEPRECATION")
-class App: Application(), HasActivityInjector {
 
-    private val component: AppComponent by lazy {
-        DaggerAppComponent
-            .builder()
-            .appModule(AppModule())
-            .build()
-    }
+class App : Application(), HasActivityInjector {
 
+    @Inject
+    lateinit var activityInjector: DispatchingAndroidInjector<Activity>
 
     override fun onCreate() {
         super.onCreate()
-        component.inject(this)
+        configureDagger()
+    }
+
+//    override fun applicationInjector(): AndroidInjector<App> {
+//        return DaggerAppComponent
+//            .builder()
+//            .build()
+//    }
+
+    private fun configureDagger() {
+        DaggerAppComponent
+            .builder()
+            .application(this)
+            .build()
+            .inject(this)
     }
 
     override fun activityInjector(): AndroidInjector<Activity> {
-        return  activityInjector()
+        return activityInjector
     }
+
 
 }

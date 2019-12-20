@@ -10,8 +10,9 @@ import com.anamarin.bitcoinpricesapp.data.local.BitcoinInfoLocal
 import com.anamarin.bitcoinpricesapp.data.models.BitcoinInfoModel
 import com.anamarin.bitcoinpricesapp.domain.repositories.BitcoinInfoRepository
 import io.reactivex.Single
+import javax.inject.Inject
 
-class BitcoinInfoRepositoryImp(
+class BitcoinInfoRepositoryImp @Inject constructor(
     private val localData: BitcoinInfoLocal,
     private val remoteData: BitcoinInfoClient,
     private val networkStatus: NetworkStatus
