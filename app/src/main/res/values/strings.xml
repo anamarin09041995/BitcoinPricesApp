@@ -3,4 +3,6 @@
     <string name="last_week">Last week</string>
     <string name="last_month">Last month</string>
     <string name="last_year">Last year</string>
+    <string name="toolbar_title">Market Place (USD)</string>
+    <string name="description">Average USD market price across major bitcoin exchanges.</string>
 </resources>

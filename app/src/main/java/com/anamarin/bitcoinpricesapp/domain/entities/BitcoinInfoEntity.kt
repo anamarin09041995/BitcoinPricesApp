@@ -7,6 +7,7 @@ class BitcoinInfoEntity(bitcoinChart: BitcoinChart) {
 
     val name: String = bitcoinChart.info.name
     val unit: String = bitcoinChart.info.unit
+    val description: String? = bitcoinChart.info.description
     val values: List<BitcoinCoordinatesModel> = bitcoinChart.values
 
     override fun equals(other: Any?): Boolean {

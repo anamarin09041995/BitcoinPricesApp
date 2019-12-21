@@ -16,6 +16,8 @@ import com.anamarin.bitcoinpricesapp.core.utils.viewModelUtil.AppViewModelFactor
 import com.anamarin.bitcoinpricesapp.data.models.BitcoinCoordinatesModel
 import com.anamarin.bitcoinpricesapp.domain.entities.BitcoinInfoEntity
 import com.github.mikephil.charting.animation.Easing
+import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
@@ -39,6 +41,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         AndroidInjection.inject(this)
 
+        supportActionBar?.title = getString(R.string.toolbar_title)
+
         tabLayout.addOnTabSelectedListener(object : BaseOnTabSelectedListener<TabLayout.Tab> {
             override fun onTabReselected(p0: TabLayout.Tab?) {}
 
@@ -47,22 +51,18 @@ class MainActivity : AppCompatActivity() {
             override fun onTabSelected(tab: TabLayout.Tab) {
                 var period = WEEK_PERIOD
                 when (tab.position) {
-                    0 -> period = WEEK_PERIOD
-                    1 -> period = MONTHS_PERIOD
-                    2 -> period = YEAR_PERIOD
+                    0 -> period = MONTHS_PERIOD
+                    1 -> period = YEAR_PERIOD
                 }
                 getData(period)
             }
         })
 
-
         viewModel.liveDataConnection.observe(this, Observer { value ->
-            if(!value) "You are offline, this chart could be outdated".snack(this)
+            if (!value) "You are offline, this chart could be outdated".snack(this)
         })
 
-
-
-        getData(WEEK_PERIOD)
+        getData(MONTHS_PERIOD)
     }
 
     override fun onResume() {
@@ -76,7 +76,8 @@ class MainActivity : AppCompatActivity() {
                 onSuccess = {
                     if (it is Success) {
                         entity = it.data
-                        generateChart()
+                        description.text = entity.description
+                        generateChart(period)
                     }
                 }, onError = {
                     "An error ocurred".snack(this)
@@ -84,38 +85,41 @@ class MainActivity : AppCompatActivity() {
             )
     }
 
-    private fun generateChart() {
+    private fun generateChart(period: String) {
         val entries = ArrayList<Entry>()
 
         for (coordinate: BitcoinCoordinatesModel in entity.values) {
             entries.add(Entry((coordinate.x).toFloat(), coordinate.y.toFloat()))
         }
 
-        val vl = LineDataSet(entries, null)
+        val charDataSet = LineDataSet(entries, "")
 
-        vl.setDrawValues(false)
-        vl.setDrawFilled(false)
-        vl.lineWidth = 3f
-        vl.fillColor = R.color.colorPrimary
-        vl.fillAlpha = R.color.colorAccent
+        charDataSet.setDrawValues(false)
+        charDataSet.setDrawFilled(false)
+        charDataSet.lineWidth = 3f
+        charDataSet.fillColor = R.color.colorPrimary
+        charDataSet.fillAlpha = R.color.colorAccent
+        charDataSet.axisDependency = YAxis.AxisDependency.LEFT
 
         lineChart.xAxis.labelRotationAngle = 0f
-        lineChart.xAxis.valueFormatter = DateAxisValueFormatter()
+        lineChart.xAxis.valueFormatter = DateAxisValueFormatter(period)
+        lineChart.xAxis.position = XAxis.XAxisPosition.BOTTOM
+        lineChart.xAxis.setDrawGridLines(false)
 
-        lineChart.data = LineData(vl)
+        lineChart.data = LineData(charDataSet)
+        lineChart.description.text = ""
 
         lineChart.axisRight.isEnabled = false
         lineChart.axisLeft.isDrawBottomYLabelEntryEnabled
 
+        lineChart.legend.isEnabled = false
         lineChart.setTouchEnabled(true)
         lineChart.setPinchZoom(true)
-
-        lineChart.description.text = "Days"
-        lineChart.setNoDataText("No forex yet!")
 
         lineChart.animateX(1800, Easing.EaseInExpo)
 
         Handler().postDelayed({ lineChart.invalidate() }, 200)
+
     }
 }
 
