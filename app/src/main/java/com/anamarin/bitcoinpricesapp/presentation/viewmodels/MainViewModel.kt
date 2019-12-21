@@ -17,7 +17,11 @@ class MainViewModel @Inject constructor(
     private val networkStatus: NetworkStatus
 ) : ViewModel() {
 
-    lateinit var data: BitcoinInfoEntity // Test purposes
+    val liveDataConnection = MutableLiveData<Boolean>()
+
+    fun checkNetWorkStatus() {
+        liveDataConnection.value = networkStatus.hasNetworkAccess()
+    }
 
     @SuppressLint("CheckResult")
     fun getBitcoinInfo(quantity: Int, period: String, chartName: String): Single<Outcome<BitcoinInfoEntity>> {
@@ -25,4 +29,5 @@ class MainViewModel @Inject constructor(
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
     }
+
 }

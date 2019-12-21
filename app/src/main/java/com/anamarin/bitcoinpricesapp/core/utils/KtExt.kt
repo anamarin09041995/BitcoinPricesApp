@@ -2,7 +2,13 @@ package com.anamarin.bitcoinpricesapp.core.utils
 
 import android.content.Context
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.snackbar.Snackbar
 
-fun Any.toast(context: Context, duration: Int = Toast.LENGTH_SHORT): Toast {
-    return Toast.makeText(context, this.toString(), duration).apply { show() }
+fun Any.snack(activity: AppCompatActivity, duration: Int = Snackbar.LENGTH_INDEFINITE) {
+    Snackbar.make(
+        activity.window.decorView.findViewById(android.R.id.content),
+        this.toString(),
+        duration
+    ).apply { setAction("OK") { this.dismiss() } }.show()
 }

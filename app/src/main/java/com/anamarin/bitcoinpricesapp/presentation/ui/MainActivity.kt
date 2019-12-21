@@ -6,6 +6,7 @@ import javax.inject.Inject
 import dagger.android.AndroidInjection
 import com.anamarin.bitcoinpricesapp.R
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import com.anamarin.bitcoinpricesapp.core.result.Success
 import com.anamarin.bitcoinpricesapp.core.utils.*
 import com.anamarin.bitcoinpricesapp.core.utils.DateAxisValueFormatter
@@ -54,12 +55,19 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
+
+        viewModel.liveDataConnection.observe(this, Observer { value ->
+            if(!value) "You are offline, this chart could be outdated".snack(this)
+        })
+
+
+
+        getData(WEEK_PERIOD)
     }
 
     override fun onResume() {
         super.onResume()
-
-        getData(WEEK_PERIOD)
+        viewModel.checkNetWorkStatus()
     }
 
     private fun getData(period: String) {
@@ -70,6 +78,8 @@ class MainActivity : AppCompatActivity() {
                         entity = it.data
                         generateChart()
                     }
+                }, onError = {
+                    "An error ocurred".snack(this)
                 }
             )
     }
