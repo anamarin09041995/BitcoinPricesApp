@@ -31,7 +31,7 @@ minSdkVersion 21
 
 ### Demo
 
-<img src="https://github.com/anamarin09041995/BitcoinPricesApp/blob/master/diagrams/offlineBehavior.jpeg" width="300" height="600">
+<img src="https://raw.githubusercontent.com/anamarin09041995/BitcoinPricesApp/master/diagrams/offlineBehavior.jpeg" width="300" height="600">
 
 ### Built With
 
@@ -48,7 +48,7 @@ Bitcoin uses the following third party libraries.
 
 The following tests was written.
 
-![alt text](https://github.com/anamarin09041995/BitcoinPricesApp/blob/master/diagrams/testResults.jpeg)
+<img src="https://raw.githubusercontent.com/anamarin09041995/BitcoinPricesApp/master/diagrams/testResults.jpeg" width="500" height="200">
 
 ## Contributing
 
