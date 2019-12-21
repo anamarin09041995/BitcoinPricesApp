@@ -42,7 +42,7 @@ Bitcoin uses the following third party libraries.
 * [Android Arch Components](https://developer.android.com/jetpack/#architecture-components) - Room, LiveData, View Model
 * [Retrofit ](https://square.github.io/retrofit/)
 * [Chart](https://weeklycoding.com/mpandroidchart/)
-* [Mockito](https://weeklycoding.com/mpandroidchart/)
+* [Mockito](https://site.mockito.org/)
 
 ## Running the tests
 
