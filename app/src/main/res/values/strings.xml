@@ -5,4 +5,5 @@
     <string name="last_year">Last year</string>
     <string name="toolbar_title">Market Place (USD)</string>
     <string name="description">Average USD market price across major bitcoin exchanges.</string>
+    <string name="update_chart">Update chart</string>
 </resources>

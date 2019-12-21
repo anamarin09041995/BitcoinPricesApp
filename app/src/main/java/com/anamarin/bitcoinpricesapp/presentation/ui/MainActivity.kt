@@ -2,6 +2,7 @@ package com.anamarin.bitcoinpricesapp.presentation.ui
 
 import android.os.Bundle
 import android.os.Handler
+import android.view.View
 import javax.inject.Inject
 import dagger.android.AndroidInjection
 import com.anamarin.bitcoinpricesapp.R
@@ -36,10 +37,13 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var entity: BitcoinInfoEntity
 
+    private var period: String = MONTHS_PERIOD
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         AndroidInjection.inject(this)
+        getData(MONTHS_PERIOD)
 
         supportActionBar?.title = getString(R.string.toolbar_title)
 
@@ -49,7 +53,6 @@ class MainActivity : AppCompatActivity() {
             override fun onTabUnselected(p0: TabLayout.Tab?) {}
 
             override fun onTabSelected(tab: TabLayout.Tab) {
-                var period = WEEK_PERIOD
                 when (tab.position) {
                     0 -> period = MONTHS_PERIOD
                     1 -> period = YEAR_PERIOD
@@ -62,12 +65,16 @@ class MainActivity : AppCompatActivity() {
             if (!value) "You are offline, this chart could be outdated".snack(this)
         })
 
-        getData(MONTHS_PERIOD)
+
     }
 
     override fun onResume() {
         super.onResume()
         viewModel.checkNetWorkStatus()
+
+        updateBtn.setOnClickListener {
+            getData(period)
+        }
     }
 
     private fun getData(period: String) {
