@@ -78,9 +78,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getData(period: String) {
+        progressBar.visibility = View.VISIBLE
         disposable add viewModel.getBitcoinInfo(1, period, CHART_NAME)
+            .doOnTerminate {
+                progressBar.visibility = View.INVISIBLE
+            }
             .subscribeBy(
                 onSuccess = {
+                    progressBar.visibility = View.GONE
                     if (it is Success) {
                         entity = it.data
                         description.text = entity.description
@@ -126,7 +131,7 @@ class MainActivity : AppCompatActivity() {
         lineChart.setTouchEnabled(true)
         lineChart.setPinchZoom(true)
 
-        lineChart.animateX(1800, Easing.EaseInExpo)
+        lineChart.animateX(1400, Easing.EaseInExpo)
 
         Handler().postDelayed({ lineChart.invalidate() }, 200)
 
