@@ -23,6 +23,7 @@ class MainViewModel @Inject constructor(
     }
 
     fun getBitcoinInfo(quantity: Int, period: String, chartName: String): Single<Outcome<BitcoinInfoEntity>> {
+        checkNetWorkStatus()
         return bitcoinUseCase.callSingle(quantity, period, chartName)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())

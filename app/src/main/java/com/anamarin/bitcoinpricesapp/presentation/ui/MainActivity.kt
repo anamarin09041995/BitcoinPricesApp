@@ -62,7 +62,7 @@ class MainActivity : AppCompatActivity() {
         })
 
         viewModel.liveDataConnection.observe(this, Observer { value ->
-            if (!value) "You are offline, this chart could be outdated".snack(this)
+            if (!value) "You are offline, the chart could be outdated".snack(this)
         })
 
 
@@ -70,8 +70,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        viewModel.checkNetWorkStatus()
-
         updateBtn.setOnClickListener {
             getData(period)
         }
