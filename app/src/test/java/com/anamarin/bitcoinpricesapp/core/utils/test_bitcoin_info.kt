@@ -13,8 +13,8 @@ fun getBitcoinInfoModelTest(): BitcoinInfoModel {
     )
 }
 
-fun getListBitcoinCoordinatesModelTest(size: Int = 5, bitcoinInfoId: Long = 0): List<BitcoinCoordinatesModel> {
-    return (0..size).map { BitcoinCoordinatesModel(bitcoinInfoId, bitcoinInfoId, it.toDouble(), it.toDouble()) }
+fun getListBitcoinCoordinatesModelTest(size: Int = 5, bitcoinInfoId: String = ""): List<BitcoinCoordinatesModel> {
+    return (0..size).map { BitcoinCoordinatesModel(0, bitcoinInfoId, it.toDouble(), it.toDouble()) }
 }
 
 fun getBitcoinInfoDTOTest(): BitcoinChartDTO {
