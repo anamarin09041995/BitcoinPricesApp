@@ -1,9 +1,10 @@
 package com.anamarin.bitcoinpricesapp.core.utils
 
 import com.anamarin.bitcoinpricesapp.data.api.BitcoinChartDTO
-import com.anamarin.bitcoinpricesapp.data.local.BitcoinInfoDao
+import com.anamarin.bitcoinpricesapp.data.models.BitcoinChart
 import com.anamarin.bitcoinpricesapp.data.models.BitcoinCoordinatesModel
 import com.anamarin.bitcoinpricesapp.data.models.BitcoinInfoModel
+import com.anamarin.bitcoinpricesapp.domain.entities.BitcoinInfoEntity
 
 fun getBitcoinInfoModelTest(): BitcoinInfoModel {
     return BitcoinInfoModel(
@@ -24,8 +25,6 @@ fun getBitcoinInfoDTOTest(): BitcoinChartDTO {
     )
 }
 
-
-//
-//fun getTestBitcoinChart(bitcoinInfoModel: BitcoinInfoModel): BitcoinChart {
-//    return BitcoinChart(bitcoinInfoModel)
-//}
+fun getBitcoinEntityTest(): BitcoinInfoEntity {
+    return BitcoinInfoEntity(BitcoinChart(getBitcoinInfoModelTest(), getListBitcoinCoordinatesModelTest()))
+}
