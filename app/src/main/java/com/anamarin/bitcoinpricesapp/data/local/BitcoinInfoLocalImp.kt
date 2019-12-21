@@ -5,8 +5,8 @@ import javax.inject.Inject
 
 class BitcoinInfoLocalImp @Inject constructor(private val dao: BitcoinInfoDao): BitcoinInfoLocal{
 
-    override fun getLastBitcoinInfoSaved(): BitcoinChart? {
-        return dao.getLastBitcoinInfoSaved()
+    override fun getLastBitcoinInfoSaved(timespan: String): BitcoinChart? {
+        return dao.getLastBitcoinInfoSaved(timespan)
     }
 
     override fun saveBitcoinInfo(bitcoinInfoToSave: BitcoinChart) {

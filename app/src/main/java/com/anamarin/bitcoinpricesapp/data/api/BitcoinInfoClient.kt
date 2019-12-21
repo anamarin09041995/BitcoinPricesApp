@@ -4,6 +4,6 @@ import io.reactivex.Single
 
 interface BitcoinInfoClient {
 
-    fun getBitcoinInfoInPeriodSingle(name: String, timestamp: String): Single<BitcoinChartDTO>
+    fun getBitcoinInfoInPeriodSingle(name: String, timespan: String): Single<BitcoinChartDTO>
 
 }

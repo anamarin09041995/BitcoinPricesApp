@@ -4,7 +4,7 @@ import com.anamarin.bitcoinpricesapp.data.models.BitcoinChart
 
 interface BitcoinInfoLocal {
 
-    fun getLastBitcoinInfoSaved(): BitcoinChart?
+    fun getLastBitcoinInfoSaved(timespan: String): BitcoinChart?
 
     fun saveBitcoinInfo(bitcoinInfoToSave: BitcoinChart)
 }

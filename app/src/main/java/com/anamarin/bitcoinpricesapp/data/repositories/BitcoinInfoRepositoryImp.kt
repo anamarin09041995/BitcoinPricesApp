@@ -25,26 +25,28 @@ class BitcoinInfoRepositoryImp @Inject constructor(
         name: String
     ): Single<Outcome<BitcoinChart>> {
         val quantityString: String = quantity.toString()
-        val timestamp: String = quantityString + period
+        val timespan: String = quantityString + period
 
         return if (networkStatus.hasNetworkAccess()) {
-            remoteData.getBitcoinInfoInPeriodSingle(name, timestamp)
+            remoteData.getBitcoinInfoInPeriodSingle(name, timespan)
                 .map {
                     val bitcoinChart = BitcoinChart(it, it.values)
+                    bitcoinChart.info.timespan = timespan
+                    bitcoinChart.values.forEach { it.bitcoinInfoId = timespan }
                     localData.saveBitcoinInfo(bitcoinChart)
                     Success(bitcoinChart) as Outcome<BitcoinChart>
                 }
                 .onErrorResumeNext {
-                    Single.fromCallable { getLastBitcoinSaved() }
+                    Single.fromCallable { getLastBitcoinSaved(timespan) }
                 }
         } else {
-            Single.fromCallable { getLastBitcoinSaved() }
+            Single.fromCallable { getLastBitcoinSaved(timespan) }
         }
     }
 
 
-    private fun getLastBitcoinSaved(): Outcome<BitcoinChart> {
-        val lastBitcoinSaved = localData.getLastBitcoinInfoSaved()
+    private fun getLastBitcoinSaved(timespan: String): Outcome<BitcoinChart> {
+        val lastBitcoinSaved = localData.getLastBitcoinInfoSaved(timespan)
 
         return if (lastBitcoinSaved != null) {
             Success(lastBitcoinSaved)

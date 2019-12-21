@@ -1,6 +1,5 @@
 package com.anamarin.bitcoinpricesapp.presentation.viewmodels
 
-import android.annotation.SuppressLint
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.anamarin.bitcoinpricesapp.core.networkStatus.NetworkStatus
@@ -23,7 +22,6 @@ class MainViewModel @Inject constructor(
         liveDataConnection.value = networkStatus.hasNetworkAccess()
     }
 
-    @SuppressLint("CheckResult")
     fun getBitcoinInfo(quantity: Int, period: String, chartName: String): Single<Outcome<BitcoinInfoEntity>> {
         return bitcoinUseCase.callSingle(quantity, period, chartName)
             .subscribeOn(Schedulers.io())

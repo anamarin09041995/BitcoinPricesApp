@@ -1,10 +1,7 @@
 package com.anamarin.bitcoinpricesapp.data.local
 
-import androidx.room.Dao
-import androidx.room.Insert
+import androidx.room.*
 import androidx.room.OnConflictStrategy.REPLACE
-import androidx.room.Query
-import androidx.room.Transaction
 import com.anamarin.bitcoinpricesapp.data.models.BitcoinChart
 import com.anamarin.bitcoinpricesapp.data.models.BitcoinCoordinatesModel
 import com.anamarin.bitcoinpricesapp.data.models.BitcoinInfoModel
@@ -12,8 +9,8 @@ import com.anamarin.bitcoinpricesapp.data.models.BitcoinInfoModel
 @Dao
 abstract class BitcoinInfoDao {
 
-    @Query("SELECT * FROM bitcoin_table LIMIT 1")
-    abstract fun getLastBitcoinInfoSaved(): BitcoinChart?
+    @Query("SELECT * FROM bitcoin_table WHERE id = :timespan")
+    abstract fun getLastBitcoinInfoSaved(timespan: String): BitcoinChart?
 
     @Transaction
     open fun saveBitcoinInfo(bitcoinInfoToSave: BitcoinChart) {
@@ -27,4 +24,6 @@ abstract class BitcoinInfoDao {
     @Insert(onConflict = REPLACE)
     abstract fun addOrReplaceBitcoinChartPoints(bitcoinCoordinatesModel: BitcoinCoordinatesModel)
 
+    @Query("DELETE FROM bitcoin_table")
+    abstract fun deleteBitcoinTable()
 }

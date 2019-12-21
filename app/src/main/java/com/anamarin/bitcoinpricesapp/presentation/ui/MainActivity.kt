@@ -85,9 +85,11 @@ class MainActivity : AppCompatActivity() {
                         entity = it.data
                         description.text = entity.description
                         generateChart(period)
+                    } else {
+                        "Something went wrong".snack(this)
                     }
                 }, onError = {
-                    "An error ocurred".snack(this)
+                    "An error occurred".snack(this)
                 }
             )
     }
@@ -113,6 +115,7 @@ class MainActivity : AppCompatActivity() {
         lineChart.xAxis.position = XAxis.XAxisPosition.BOTTOM
         lineChart.xAxis.setDrawGridLines(false)
 
+        lineChart.invalidate()
         lineChart.data = LineData(charDataSet)
         lineChart.description.text = ""
 

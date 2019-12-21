@@ -1,5 +1,6 @@
 package com.anamarin.bitcoinpricesapp.data.models
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.io.Serializable
@@ -7,7 +8,8 @@ import java.io.Serializable
 @Entity(tableName = "bitcoin_table")
 open class BitcoinInfoModel(
     @PrimaryKey
-    val id: Long = 0,
+    @ColumnInfo(name = "id")
+    var timespan: String = "",
     val status: String? = null,
     val name: String = "",
     val unit: String = "",
